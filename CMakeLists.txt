@@ -13,12 +13,12 @@ add_definitions ("-Wall")
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 if(WIN32)
-add_executable (cmt cmt/common.cpp cmt/gui.cpp cmt/main.cpp
+add_executable (openPOWERDemo openPOWERDemo.cpp cmt/common.cpp cmt/gui.cpp 
     cmt/CMT.cpp cmt/Consensus.cpp cmt/Fusion.cpp cmt/Matcher.cpp cmt/Tracker.cpp
     cmt/fastcluster/fastcluster.cpp cmt/getopt/getopt.cpp
     )
 else()
-add_executable (cmt cmt/common.cpp cmt/gui.cpp cmt/main.cpp
+add_executable (openPOWERDemo openPOWERDemo.cpp cmt/common.cpp cmt/gui.cpp 
     cmt/CMT.cpp cmt/Consensus.cpp cmt/Fusion.cpp cmt/Matcher.cpp cmt/Tracker.cpp
     cmt/fastcluster/fastcluster.cpp)
 endif()
