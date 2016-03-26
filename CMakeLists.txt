@@ -23,7 +23,7 @@ add_executable (openPOWERDemo openPOWERDemo.cpp cmt/common.cpp cmt/gui.cpp
     cmt/fastcluster/fastcluster.cpp)
 endif()
 
-target_link_libraries(cmt ${OpenCV_LIBS})
+target_link_libraries(openPOWERDemo ${OpenCV_LIBS})
 
 
 
