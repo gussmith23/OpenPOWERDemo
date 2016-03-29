@@ -256,4 +256,6 @@ void setObjectToFind(Mat image)
 	extractor.compute(object_image, object_keypoints, object_descriptors);
 
 	attemptObjectDetection = true;
+	
+	trackerInitialized = false;
 }
