@@ -25,5 +25,8 @@ endif()
 
 target_link_libraries(openPOWERDemo ${OpenCV_LIBS})
 
-
+# copy needed libs to output dir on build
+add_custom_command(TARGET openPOWERDemo PRE_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                       ${CMAKE_SOURCE_DIR}/thirdparty $<TARGET_FILE_DIR:openPOWERDemo>)
 
