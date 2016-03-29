@@ -38,6 +38,12 @@ Mat object_descriptors;
 vector<KeyPoint> scene_keypoints;
 Mat scene_descriptors;
 
+double lastArea = -1.0f;
+Point2d lastLocation = Point2d(-1, -1);
+double scaleDelta = 1.0f;
+Point2f positionDelta = Point2f(1.0f, 1.0f);
+double scaleDeltaThreshold = 0.1f;
+Point2f positionDeltaThreshold = Point2f(0.1f, 0.1f);
 
 int main()
 {
@@ -123,13 +129,17 @@ void receiveData()
 }
 
 /**
+ * Find ROI given a greyscale image.
+ * This function will need to be called multiple times on successive frames
+ *	before initializing tracker, as it has to confirm that it's finding the same
+ *  object multiple times.
  * Based, as always, on OpenCV's example code: 
  * http://docs.opencv.org/2.4/doc/tutorials/features2d/feature_homography/feature_homography.html?highlight=surf
  */
 void initializeTracker(Mat im_gray)
 {
 	Mat scene_image = im_gray;
-	
+
 	detector.detect(scene_image, scene_keypoints);
 	extractor.compute(scene_image, scene_keypoints, scene_descriptors);
 
@@ -194,9 +204,40 @@ void initializeTracker(Mat im_gray)
 	//rectangle(image_to_show, roi, Scalar(255, 0,0));
 	//imshow("ROI found by SURF", image_to_show);
 	//waitKey();
-	
+
 	// Validity of ROI checking goes here.
-	bool roiValid = true;
+	bool roiValid = false;
+
+	// Get area and center location
+	double area = roi.area();
+	Point2d center = Point2d(roi.x + roi.width / 2, roi.y + roi.height / 2);
+
+	// If we have previous measurements 
+	if (lastArea >= 0.0f && lastLocation.x >= 0 && lastLocation.y >= 0)
+	{
+		positionDelta.x = abs(lastLocation.x - center.x) / scene_image.cols;
+		positionDelta.y = abs(lastLocation.y - center.y) / scene_image.rows;
+		scaleDelta = abs(lastArea - area) / lastArea;
+
+		// Log
+		printf("New deltas: position (%f, %f), scale %f\n", positionDelta.x, positionDelta.y, scaleDelta);
+
+		// Check if valid
+		if (scaleDelta < scaleDeltaThreshold && positionDelta.x < positionDeltaThreshold.x && positionDelta.y < positionDeltaThreshold.y)
+		{
+			roiValid = true;
+			cout << "ROI determined to be valid!" << endl;
+		}
+		else
+		{
+			cout << "ROI determined to be invalid!" << endl;
+		}
+
+	}
+
+	// Log the current measurements.
+	lastArea = area;
+	lastLocation = center;
 
 	// Finally, initialize if SURF worked appropriately.
 	if (roiValid)
