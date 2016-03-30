@@ -32,6 +32,7 @@ void CMT::initialize(const Mat im_gray, const Rect rect)
 
     //Get initial keypoints in whole image and compute their descriptors
     vector<KeyPoint> keypoints;
+	#warning SURF call
     detector->detect(im_gray, keypoints);
 
     //Divide keypoints into foreground and background keypoints according to selection
@@ -66,7 +67,9 @@ void CMT::initialize(const Mat im_gray, const Rect rect)
     //Compute foreground/background features
     Mat descs_fg;
     Mat descs_bg;
+	#warning SURF call
     descriptor->compute(im_gray, keypoints_fg, descs_fg);
+	#warning SURF call
     descriptor->compute(im_gray, keypoints_bg, descs_bg);
 
     //Only now is the right time to convert keypoints to points, as compute() might remove some keypoints
@@ -132,11 +135,13 @@ void CMT::processFrame(Mat im_gray) {
 
     //Detect keypoints, compute descriptors
     vector<KeyPoint> keypoints;
+	#warning SURF call
     detector->detect(im_gray, keypoints);
 
     FILE_LOG(logDEBUG) << keypoints.size() << " keypoints found.";
 
     Mat descriptors;
+	#warning SURF call
     descriptor->compute(im_gray, keypoints, descriptors);
 
     //Match keypoints globally

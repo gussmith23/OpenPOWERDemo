@@ -140,7 +140,9 @@ void initializeTracker(Mat im_gray)
 {
 	Mat scene_image = im_gray;
 
+	#warning SURF call
 	detector.detect(scene_image, scene_keypoints);
+	#warning SURF call
 	extractor.compute(scene_image, scene_keypoints, scene_descriptors);
 
 	FlannBasedMatcher matcher;
@@ -252,7 +254,9 @@ void setObjectToFind(Mat image)
 {
 	object_image = image;
 
+	#warning SURF call
 	detector.detect(object_image, object_keypoints);
+	#warning SURF call
 	extractor.compute(object_image, object_keypoints, object_descriptors);
 
 	attemptObjectDetection = true;
